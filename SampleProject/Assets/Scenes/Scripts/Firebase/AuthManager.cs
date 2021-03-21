@@ -10,6 +10,7 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Functions;
 
+
 public class AuthManager : MonoBehaviour
 {
 
@@ -32,6 +33,7 @@ public class AuthManager : MonoBehaviour
     //Register variables
     [Header("Register")]
     public GameObject signupGroup;
+    public TMP_InputField usernameField;
     public TMP_InputField emailSignupField;
     public TMP_InputField passwordSignupField;
     public TMP_InputField passwordSignupVerifyField;
@@ -132,34 +134,47 @@ public class AuthManager : MonoBehaviour
     }
 
     public void SignupButton() {
+        string username = usernameField.text;
         string email = emailSignupField.text;
         string password = passwordSignupField.text;
         string passwordVerify = passwordSignupVerifyField.text;
-        StartCoroutine(Signup(email, password, passwordVerify));
+        StartCoroutine(Signup(username, email, password, passwordVerify));
     }
 
-    private Task<string> signupTask(string email, string password) {
+    private Task<string> signupTask(string email, string password, string username) {
         // Create the arguments to the callable function.
         var data = new Dictionary<string, object>();
+        data["username"] = username;
         data["email"] = email;
         data["password"] = password;
-
         // Call the function and extract the operation from the result.
         var function = functions.GetHttpsCallable("createUser");
         return function.CallAsync(data).ContinueWith((task) => {
-            return (string) task.Result.Data;
+            // return (string) task.Result.Data;
+            return "Done";
         });
     }
 
+    private void resetFields() {
+        errorLoginText.text = "";
+        emailLoginField.text = "";
+        passwordLoginField.text = "";
+        usernameField.text = "";
+        emailSignupField.text = "";
+        passwordSignupField.text = "";
+        passwordSignupVerifyField.text = "";
+        
+    }
 
-    private IEnumerator Signup(string email, string password, string passwordVerify) {
+
+    private IEnumerator Signup(string username, string email, string password, string passwordVerify) {
 
         if (email == "") {
             errorSignupText.text = "Missing Username";
         }else if(passwordSignupField.text != passwordSignupVerifyField.text) {
             errorSignupText.text = "Password Does Not Match!";
         }else{
-            var task = signupTask(email, password);
+            var task = signupTask(email, password, username);
 
             yield return new WaitUntil(predicate: () => task.IsCompleted);
 
@@ -168,83 +183,9 @@ public class AuthManager : MonoBehaviour
                 errorSignupText.text = $"Error: {task.Exception}";
             }else{
                 Debug.LogWarning(message: "Registration successful");
-                errorSignupText.text = "Account Created";
+                resetFields();
+                ToggleMode();
             }
         }
     }
 }
-
-/*
-    private IEnumerator Register(string _email, string _password, string _username) {
-        if (_username == "") {
-            warningRegisterText.text = "Missing Username";
-        }else if(passwordRegisterField.text != passwordRegisterVerifyField.text) {
-            warningRegisterText.text = "Password Does Not Match!";
-        }else{
-
-            var RegisterTask = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
-            //Wait till 
-            yield return new WaitUntil(predicate: () => RegisterTask.IsCompleted);
-
-            if (RegisterTask.Exception != null)
-            {
-                //If there are errors handle them
-                Debug.LogWarning(message: $"Failed to register task with {RegisterTask.Exception}");
-                FirebaseException firebaseEx = RegisterTask.Exception.GetBaseException() as FirebaseException;
-                AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
-
-                string message = "Register Failed!";
-                switch (errorCode)
-                {
-                    case AuthError.MissingEmail:
-                        message = "Missing Email";
-                        break;
-                    case AuthError.MissingPassword:
-                        message = "Missing Password";
-                        break;
-                    case AuthError.WeakPassword:
-                        message = "Weak Password";
-                        break;
-                    case AuthError.EmailAlreadyInUse:
-                        message = "Email Already In Use";
-                        break;
-                }
-                warningRegisterText.text = message;
-            }
-            else
-            {
-                //User has now been created
-                //Now get the result
-                User = RegisterTask.Result;
-
-                if (User != null)
-                {
-                    //Create a user profile and set the username
-                    UserProfile profile = new UserProfile{DisplayName = _username};
-
-                    //Call the Firebase auth update user profile function passing the profile with the username
-                    var ProfileTask = User.UpdateUserProfileAsync(profile);
-                    //Wait until the task completes
-                    yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
-
-                    if (ProfileTask.Exception != null)
-                    {
-                        //If there are errors handle them
-                        Debug.LogWarning(message: $"Failed to register task with {ProfileTask.Exception}");
-                        FirebaseException firebaseEx = ProfileTask.Exception.GetBaseException() as FirebaseException;
-                        AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
-                        warningRegisterText.text = "Username Set Failed!";
-                    }
-                    else
-                    {
-                        //Username is now set
-                        //Now return to login screen
-                        UIManager.instance.LoginScreen();
-                        warningRegisterText.text = "";
-                    }
-                }
-            }
-        }
-    }
-
-    */

@@ -1,41 +1,34 @@
 {
   "project_info": {
-    "project_number": "255752210732",
-    "project_id": "ucf-tower-defense",
-    "storage_bucket": "ucf-tower-defense.appspot.com"
+    "project_number": "26777436310",
+    "project_id": "ucf-tower-defense-bd814",
+    "storage_bucket": "ucf-tower-defense-bd814.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:255752210732:android:fd74fbdc022a58b4f70489",
+        "mobilesdk_app_id": "1:26777436310:android:5706499be26d80a14902b7",
         "android_client_info": {
-          "package_name": "com.cop4431.ucftowerdefense"
+          "package_name": "com.cop4331.ucftowerdefense"
         }
       },
       "oauth_client": [
         {
-          "client_id": "255752210732-gn049dbj1fupq7rtpkbdclpakq6igfgk.apps.googleusercontent.com",
+          "client_id": "26777436310-pgp6mvh7kmmmr6h1g8ffltdl1gbpfia8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBO2CREGUnJSXJ96ZxBvAEZMOvQfQXxFHY"
+          "current_key": "AIzaSyAT5oCpne_PD_qznR-lXG1gnFwidnjEHk4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "255752210732-gn049dbj1fupq7rtpkbdclpakq6igfgk.apps.googleusercontent.com",
+              "client_id": "26777436310-pgp6mvh7kmmmr6h1g8ffltdl1gbpfia8.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "255752210732-7f56e2khqvi1mrjehpqpjv0il0u5lt5b.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.cop4431.ucf-tower-defense"
-              }
             }
           ]
         }
